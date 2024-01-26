@@ -20,6 +20,6 @@ services:
       - ASPNETCORE_ENVIRONMENT=Development
     restart: always
     ports:
-      - "5032:80"
+      - "5121:80"
     #depends_on:
     #  - nadinsoftDb
