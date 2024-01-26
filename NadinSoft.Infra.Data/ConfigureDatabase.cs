@@ -11,7 +11,7 @@ namespace NadinSoft.Infra.Data
         {
             services.AddDbContext<NadinSoftContext>(options =>
                 options.UseSqlServer(configuration.GetConnectionString("DefaultConnection")));
-
+            
             return services;
         }
 

@@ -1,8 +1,9 @@
-﻿using Microsoft.EntityFrameworkCore;
+﻿using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore;
 
 namespace NadinSoft.Infra.Data
 {
-    public class NadinSoftContext : DbContext
+    public class NadinSoftContext : IdentityDbContext
     {
         public NadinSoftContext(DbContextOptions<NadinSoftContext> options) : base(options)
         {

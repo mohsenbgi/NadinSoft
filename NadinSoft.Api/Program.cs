@@ -1,4 +1,8 @@
+using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.OpenApi.Models;
 using NadinSoft.Infra.Data;
+using NadinSoft.Infra.Identity;
+using NadinSoft.Infra.IoC;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -13,8 +17,42 @@ builder.Services.AddControllers();
 // setting dbContexts
 builder.Services.AddDatabaseConfiguration(builder.Configuration);
 
+// ASP.NET Identity Settings & JWT
+builder.Services.AddApiIdentityConfiguration(builder.Configuration);
+
+// Adding MediatR
+builder.Services.AddMediatR(config =>
+{
+    config.RegisterServicesFromAssemblies(AppDomain.CurrentDomain.GetAssemblies());
+});
+
+// .NET Native DI Abstraction
+builder.Services.RegisterServices();
+
 builder.Services.AddEndpointsApiExplorer();
-builder.Services.AddSwaggerGen();
+builder.Services.AddSwaggerGen(options =>
+{
+    // add JWT Authentication
+    var securityScheme = new OpenApiSecurityScheme
+    {
+        Name = "JWT Authentication",
+        Description = "Enter JWT Bearer token **_only_**",
+        In = ParameterLocation.Header,
+        Type = SecuritySchemeType.Http,
+        Scheme = "bearer", // must be lower case
+        BearerFormat = "JWT",
+        Reference = new OpenApiReference
+        {
+            Id = JwtBearerDefaults.AuthenticationScheme,
+            Type = ReferenceType.SecurityScheme
+        }
+    };
+    options.AddSecurityDefinition(securityScheme.Reference.Id, securityScheme);
+    options.AddSecurityRequirement(new OpenApiSecurityRequirement
+    {
+        {securityScheme, new string[] { }}
+    });
+});
 
 var app = builder.Build();
 
@@ -29,6 +67,14 @@ if (app.Environment.IsDevelopment())
 
 //app.UseHttpsRedirection();
 
+app.UseCors(c =>
+{
+    c.AllowAnyHeader();
+    c.AllowAnyMethod();
+    c.AllowAnyOrigin();
+});
+
+app.UseAuthentication();
 app.UseAuthorization();
 
 app.MapControllers();
