@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Identity;
+﻿using MediatR;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Options;
 using NadinSoft.Api.Models;
@@ -8,8 +9,7 @@ using NadinSoft.Infra.Identity.Model;
 namespace NadinSoft.Api.Controllers
 {
     [Route("api/[controller]")]
-    [ApiController]
-    public class AccountController : ControllerBase
+    public class AccountController : ApiController
     {
         private readonly SignInManager<IdentityUser> _signInManager;
         private readonly UserManager<IdentityUser> _userManager;
@@ -18,7 +18,8 @@ namespace NadinSoft.Api.Controllers
         public AccountController(
             SignInManager<IdentityUser> signInManager,
             UserManager<IdentityUser> userManager,
-            IOptions<AppJwtSettings> appJwtSettings)
+            IOptions<AppJwtSettings> appJwtSettings,
+            ISender sender) : base(sender)
         {
             _userManager = userManager;
             _signInManager = signInManager;

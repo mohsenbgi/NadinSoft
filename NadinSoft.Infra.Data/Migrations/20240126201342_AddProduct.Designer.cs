@@ -3,6 +3,7 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using NadinSoft.Infra.Data;
 
@@ -11,9 +12,11 @@ using NadinSoft.Infra.Data;
 namespace NadinSoft.Infra.Data.Migrations
 {
     [DbContext(typeof(NadinSoftContext))]
-    partial class NadinSoftContextModelSnapshot : ModelSnapshot
+    [Migration("20240126201342_AddProduct")]
+    partial class AddProduct
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder

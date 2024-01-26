@@ -3,6 +3,10 @@ using Microsoft.OpenApi.Models;
 using NadinSoft.Infra.Data;
 using NadinSoft.Infra.Identity;
 using NadinSoft.Infra.IoC;
+using AutoMapper;
+using NadinSoft.Application.AutoMapper;
+using MediatR;
+using NadinSoft.Application.Behaviors;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -17,6 +21,7 @@ builder.Services.AddControllers();
 // setting dbContexts
 builder.Services.AddDatabaseConfiguration(builder.Configuration);
 
+
 // ASP.NET Identity Settings & JWT
 builder.Services.AddApiIdentityConfiguration(builder.Configuration);
 
@@ -24,10 +29,15 @@ builder.Services.AddApiIdentityConfiguration(builder.Configuration);
 builder.Services.AddMediatR(config =>
 {
     config.RegisterServicesFromAssemblies(AppDomain.CurrentDomain.GetAssemblies());
+    //config.RegisterServicesFromAssemblyContaining(typeof(NadinSoft.Application.AssemblyReference));
 });
 
 // .NET Native DI Abstraction
 builder.Services.RegisterServices();
+
+// Adding auto mapper
+builder.Services.AddAutoMapper(typeof(EntityToResponseModelMappingProfile));
+
 
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen(options =>
