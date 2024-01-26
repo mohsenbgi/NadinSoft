@@ -1,0 +1,16 @@
+version: '3.4'
+
+services:
+
+  nadinsoftDb:
+    image: mcr.microsoft.com/mssql/server:2019-latest
+
+  nadinsoft.api:
+    image: ${DOCKER_REGISTRY-}nadinsoftapi
+    build:
+      context: .
+      dockerfile: NadinSoft.Api/Dockerfile
+volumes:
+  nadinsoftDb_data:
+  nadinsoftDb_log:
+  nadinsoftDb_secrets:
