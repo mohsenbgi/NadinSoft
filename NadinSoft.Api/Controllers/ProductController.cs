@@ -21,33 +21,19 @@ namespace NadinSoft.Api.Controllers
         }
 
         [HttpGet("{id:int}")]
-        public async Task<IActionResult> Index(int id, CancellationToken cancellationToken)
+        public async Task<ResponseResult> Index(int id, CancellationToken cancellationToken)
         {
             var query = new GetProductByIdQuery(id);
 
-            var result = await Sender.Send(query, cancellationToken);
-
-            if (result.IsFailure)
-            {
-                return Ok(ResponseResult.Failure(result.Message));
-            }
-
-            return Ok(ResponseResult.Success("Success", result.Value));
+            return await Sender.Send(query, cancellationToken);
         }
 
         [HttpGet]
-        public async Task<IActionResult> List([FromQuery] FilterProductModel request, CancellationToken cancellationToken)
+        public async Task<ResponseResult> List([FromQuery] FilterProductModel request, CancellationToken cancellationToken)
         {
             var query = new GetAllProductsQuery(request.UserId, request.Page, request.Take);
 
-            var result = await Sender.Send(query, cancellationToken);
-
-            if (result.IsFailure)
-            {
-                return Ok(ResponseResult.Failure(result.Message));
-            }
-
-            return Ok(ResponseResult.Success("Success", result.Value));
+            return await Sender.Send(query, cancellationToken);
         }
 
         [Authorize]
@@ -67,7 +53,7 @@ namespace NadinSoft.Api.Controllers
 
             if (result.IsFailure)
             {
-                return Ok(ResponseResult.Failure(result.Message));
+                return BadRequest(ResponseResult.Failure(result));
             }
 
             return CreatedAtAction(
@@ -78,7 +64,7 @@ namespace NadinSoft.Api.Controllers
 
         [Authorize]
         [HttpPut]
-        public async Task<IActionResult> Update(UpdateProductModel request, CancellationToken cancellationToken)
+        public async Task<ResponseResult> Update(UpdateProductModel request, CancellationToken cancellationToken)
         {
             var command = new UpdateProductCommand(
                     request.Id,
@@ -90,33 +76,19 @@ namespace NadinSoft.Api.Controllers
                     request.IsAvailable
                 );
 
-            var result = await Sender.Send(command, cancellationToken);
-
-            if (result.IsFailure)
-            {
-                return Ok(ResponseResult.Failure(result.Message));
-            }
-
-            return Ok(ResponseResult.Success());
+            return await Sender.Send(command, cancellationToken);
         }
 
         [Authorize]
         [HttpDelete("{id:int}")]
-        public async Task<IActionResult> Delete(int id, CancellationToken cancellationToken)
+        public async Task<ResponseResult> Delete(int id, CancellationToken cancellationToken)
         {
             var command = new DeleteProductCommand(
                     id,
                     User.GetUserId()
                 );
 
-            var result = await Sender.Send(command, cancellationToken);
-
-            if (result.IsFailure)
-            {
-                return Ok(ResponseResult.Failure(result.Message));
-            }
-
-            return Ok(ResponseResult.Success());
+            return await Sender.Send(command, cancellationToken);
         }
     }
 }
