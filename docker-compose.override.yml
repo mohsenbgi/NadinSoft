@@ -6,7 +6,6 @@ services:
     container_name: nadinsotDb
     environment:
         MSSQL_SA_PASSWORD: "12MoaceEA"
-        SA_PASSWORD: "12MoaceEA"
         ACCEPT_EULA: "Y"
     restart: always
     ports:
