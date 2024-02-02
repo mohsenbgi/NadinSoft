@@ -43,7 +43,7 @@ namespace NadinSoft.Api.Controllers
             {
                 UserName = registerUser.Email,
                 Email = registerUser.Email,
-                EmailConfirmed = true
+                EmailConfirmed = true,
             };
 
             var result = await _userManager.CreateAsync(user, registerUser.Password);

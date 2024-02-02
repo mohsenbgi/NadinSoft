@@ -5,15 +5,13 @@ services:
   nadinsoftDb:
     container_name: nadinsotDb
     environment:
-        SA_PASSWORD: "12MoaceEA"
+        MSSQL_SA_PASSWORD: "12MoaceEA"
         ACCEPT_EULA: "Y"
     restart: always
     ports:
-        - "5666:1433"
+        - "1401:1433"
     volumes:
-      - "nadinsoftDb_data:/var/opt/mssql/data"
-      - "nadinsoftDb_log:/var/opt/mssql/log"
-      - "nadinsoftDb_secrets:/var/opt/mssql/secrets"
+      - "nadinsoftDb_volume:/var/opt/mssql"
 
   nadinsoft.api:
     environment:
@@ -21,5 +19,5 @@ services:
     restart: always
     ports:
       - "5121:80"
-    #depends_on:
-    #  - nadinsoftDb
+    depends_on:
+      - nadinsoftDb
